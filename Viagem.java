@@ -74,4 +74,14 @@ class Viagem {
     public double getDistanciaTotal() {
         return distanciaTotal;
     }
+
+    public Motorista getMotorista() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMotorista'");
+    }
+
+    public Object getCarro() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarro'");
+    }
 }
