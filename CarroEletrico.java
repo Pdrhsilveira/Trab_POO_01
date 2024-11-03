@@ -26,10 +26,15 @@ class CarroEletrico {
         return autonomiaAtual;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void reduzirAutonomia(double distancia) {
         autonomiaAtual -= distancia;
     }
 }
+
 
 class CarroCompacto extends CarroEletrico {
     public CarroCompacto(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
@@ -43,6 +48,11 @@ class CarroSedan extends CarroEletrico {
     }
 }
 
+class CarroSUV extends CarroEletrico {
+    public CarroSUV(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
+        super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
+    }
+}
 class CarroSUV extends CarroEletrico {
     public CarroSUV(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
         super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
