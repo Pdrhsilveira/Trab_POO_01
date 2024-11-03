@@ -26,22 +26,44 @@ class Viagem {
     }
 
     public void iniciarViagem() {
+        System.out.println("Iniciando viagem com o motorista " + motorista.getNome() + ", habilitação nº " + motorista.getNumeroHabilitacao() +
+                " com " + motorista.getExperiencia() + " anos de experiência.");
         while (distanciaPercorrida < distanciaTotal) {
             double autonomiaAtual = carro.getAutonomiaAtual();
+    
+            // Verifica se a autonomia atual é suficiente para completar a viagem
             if (autonomiaAtual >= (distanciaTotal - distanciaPercorrida)) {
                 carro.reduzirAutonomia(distanciaTotal - distanciaPercorrida);
                 distanciaPercorrida = distanciaTotal;
                 System.out.println("Viagem concluída sem paradas.");
             } else {
+                // Se a autonomia não for suficiente, busca uma parada para recarga
                 System.out.println("Autonomia insuficiente, buscando parada.");
+    
+                boolean recarregou = false;
                 for (Eletroposto parada : paradas) {
                     if (parada.verificarDisponibilidade()) {
                         carro.recarregarBateria();
                         parada.liberarVaga();
+                        recarregou = true;
                         break;
                     }
                 }
+    
+                if (!recarregou) {
+                    System.out.println("Nenhuma parada disponível para recarga. Viagem interrompida.");
+                    break;
+                }
+    
+                // Atualiza a distância percorrida após recarga
+                carro.reduzirAutonomia(autonomiaAtual);
+                distanciaPercorrida += autonomiaAtual;
+                System.out.println("Distância percorrida até agora: " + distanciaPercorrida + " km.");
             }
+        }
+    
+        if (distanciaPercorrida >= distanciaTotal) {
+            System.out.println("Viagem concluída com sucesso.");
         }
     }
 
