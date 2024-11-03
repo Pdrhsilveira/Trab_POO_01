@@ -18,4 +18,12 @@ class Motorista {
     public String getNome() {
         return nome;
     }
+
+    public String getNumeroHabilitacao() {
+        return numeroHabilitacao;
+    }
+
+    public int getExperiencia() {
+        return experiencia;
+    }
 }
