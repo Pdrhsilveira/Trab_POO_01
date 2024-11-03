@@ -1,4 +1,4 @@
-public class SistemaGestaoFrota {
+public class Main {
     public static void main(String[] args) {
         // Criação de carros
         CarroCompacto carro1 = new CarroCompacto(1, "Tesla", "Model 3", 2020, 75, 350);
