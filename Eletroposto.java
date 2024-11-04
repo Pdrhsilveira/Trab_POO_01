@@ -1,40 +1,55 @@
-class Eletroposto {
-    private int id;
-    private String local;
-    private int numVagas;
-    private int vagasOcupadas;
-    private int tempoCarga;
+// Classe que representa eletropostos para o carregamento do veiculos
+public class Eletropostos {
+  private int id;                   // Identificador único do eletroposto
+  private int numeroVagas;          // Número de vagas disponíveis para carregamento
+  private double tempoCarregamento; // Tempo médio de carregamento em horas
+  private double distancia;         // Distância do eletroposto em relação a uma rota, em quilômetros
 
-    public Eletroposto(int id, String local, int numVagas, int tempoCarga) {
-        this.id = id;
-        this.local = local;
-        this.numVagas = numVagas;
-        this.vagasOcupadas = 0;
-        this.tempoCarga = tempoCarga;
-    }
+  // Construtor da classe Eletropostos
+  public Eletropostos(int id, int numeroVagas, double tempoCarregamento) {
+    this.id = id;
+    this.numeroVagas = numeroVagas;
+    this.tempoCarregamento = tempoCarregamento;
+  }
 
-    public boolean verificarDisponibilidade() {
-        return vagasOcupadas < numVagas;
-    }
+  // Método Get para obter o ID do eletroposto
+  public int get_id() {
+    return this.id;
+  }
 
-    public void ocuparVaga() {
-        if (verificarDisponibilidade()) {
-            vagasOcupadas++;
-            System.out.println("Vaga ocupada no Eletroposto " + id + " localizado em " + local);
-            System.out.println("Tempo estimado de carga: " + tempoCarga + " minutos.");
-        } else {
-            System.out.println("Eletroposto " + id + " em " + local + " está cheio.");
-        }
+  // Método para definir a distância do eletroposto em relação a uma rota
+  // Retorna true se a distância for válida (maior que 0 e menor ou igual à distância total da rota)
+  public Boolean setDistancia(double d, Rota rota) {
+    if (d > 0 && d <= rota.getKmPercorrido()) {
+      this.distancia = d;
+      return true;
     }
+    System.out.println("Distância inválida!");
+    return false;
+  }
 
-    public void liberarVaga() {
-        if (vagasOcupadas > 0) {
-            vagasOcupadas--;
-            System.out.println("Vaga liberada no Eletroposto " + id + " localizado em " + local);
-        }
-    }
+  // Método para exibir informações do eletroposto
+  public void exibirEletroposto() {
+    System.out.println("ID: " + id + ", Vagas: " + numeroVagas + ", Tempo: " + tempoCarregamento + ", Distância: " + distancia + "km");
+  }
 
-    public int getId() {
-        return id;
-    }
+  // Método Get para obter o ID do eletroposto
+  public int getId() {
+    return id;
+  }
+
+  // Método Get para obter o número de vagas disponíveis
+  public int getNumeroVagas() {
+    return numeroVagas;
+  }
+
+  // Método Get para obter o tempo médio de carregamento
+  public double getTempoCarregamento() {
+    return tempoCarregamento;
+  }
+
+  // Método Get para obter a distância do eletroposto
+  public double getDistancia() {
+    return distancia;
+  }
 }
