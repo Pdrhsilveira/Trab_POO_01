@@ -1,87 +1,29 @@
-import java.util.ArrayList;
-import java.util.List;
+// Classe Viagem: Representa uma viagem realizada com um veículo elétrico, em uma rota específica, por um motorista específico
+public class Viagem {
+  private Rota rota;             // Rota da viagem
+  private Motoristas motorista;  // Motorista responsável pela viagem
+  private CarroEletrico veiculo; // Veículo elétrico utilizado na viagem
 
-class Viagem {
-    private CarroEletrico carro;
-    private Motorista motorista;
-    private List<Eletroposto> paradas;
-    private double distanciaTotal;
-    private double distanciaPercorrida;
+  // Construtor da classe Viagem: Inicializa a viagem com uma rota, um motorista e um veículo específico
+  public Viagem(Rota rota, Motoristas motorista, CarroEletrico veiculo) {
+    this.rota = rota;
+    this.motorista = motorista;
+    this.veiculo = veiculo;
+  }
+ 
+  // Métodos Getters
+  public Rota getRota() {
+    return rota;
+  }
+  
+  public Motoristas getMotorista() {
+    return motorista;
+  }
 
-    public Viagem(CarroEletrico carro, Motorista motorista, double distanciaTotal) {
-        this.carro = carro;
-        this.motorista = motorista;
-        this.distanciaTotal = distanciaTotal;
-        this.distanciaPercorrida = 0;
-        this.paradas = new ArrayList<>();
-    }
-
-    public void adicionarParada(Eletroposto eletroposto) {
-        if (eletroposto.verificarDisponibilidade()) {
-            paradas.add(eletroposto);
-            eletroposto.ocuparVaga();
-        } else {
-            System.out.println("Eletroposto " + eletroposto.getId() + " está cheio.");
-        }
-    }
-
-    public void iniciarViagem() {
-        System.out.println("Iniciando viagem com o motorista " + motorista.getNome() + ", habilitação nº " + motorista.getNumeroHabilitacao() +
-                " com " + motorista.getExperiencia() + " anos de experiência.");
-        while (distanciaPercorrida < distanciaTotal) {
-            double autonomiaAtual = carro.getAutonomiaAtual();
-    
-            // Verifica se a autonomia atual é suficiente para completar a viagem
-            if (autonomiaAtual >= (distanciaTotal - distanciaPercorrida)) {
-                carro.reduzirAutonomia(distanciaTotal - distanciaPercorrida);
-                distanciaPercorrida = distanciaTotal;
-                System.out.println("Viagem concluída sem paradas.");
-            } else {
-                // Se a autonomia não for suficiente, busca uma parada para recarga
-                System.out.println("Autonomia insuficiente, buscando parada.");
-    
-                boolean recarregou = false;
-                for (Eletroposto parada : paradas) {
-                    if (parada.verificarDisponibilidade()) {
-                        carro.recarregarBateria();
-                        parada.liberarVaga();
-                        recarregou = true;
-                        break;
-                    }
-                }
-    
-                if (!recarregou) {
-                    System.out.println("Nenhuma parada disponível para recarga. Viagem interrompida.");
-                    break;
-                }
-    
-                // Atualiza a distância percorrida após recarga
-                carro.reduzirAutonomia(autonomiaAtual);
-                distanciaPercorrida += autonomiaAtual;
-                System.out.println("Distância percorrida até agora: " + distanciaPercorrida + " km.");
-            }
-        }
-    
-        if (distanciaPercorrida >= distanciaTotal) {
-            System.out.println("Viagem concluída com sucesso.");
-        }
-    }
-
-    public double getDistanciaPercorrida() {
-        return distanciaPercorrida;
-    }
-
-    public double getDistanciaTotal() {
-        return distanciaTotal;
-    }
-
-    public Motorista getMotorista() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMotorista'");
-    }
-
-    public Object getCarro() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarro'");
-    }
+  // Método exibirViagem: Exibe os detalhes da viagem, incluindo a origem, destino, distância percorrida, e o modelo e marca do veículo
+  public void exibirViagem() {
+      System.out.println("-> Origem: " + rota.getOrigem() + ", Destino: " + rota.getDestino() + ", Distancia:" + rota.getKmPercorrido() + "KM" + 
+      "\nVEICULO UTILIZADO - " + " Modelo: " + veiculo.getModelo() + ", Marca: " + veiculo.getMarca() + "\n");
+  }
+  
 }
