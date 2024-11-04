@@ -1,60 +1,112 @@
-class CarroEletrico {
-    protected int id;
-    protected String marca;
-    protected String modelo;
-    protected int anoFabricacao;
-    protected double capacidadeBateria;
-    protected double autonomiaMaxima;
-    protected double autonomiaAtual;
-
-    public CarroEletrico(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
-        this.id = id;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.anoFabricacao = anoFabricacao;
-        this.capacidadeBateria = capacidadeBateria;
-        this.autonomiaMaxima = autonomiaMaxima;
-        this.autonomiaAtual = autonomiaMaxima; // Começa com a autonomia máxima
-    }
-
-    public void recarregarBateria() {
-        autonomiaAtual = autonomiaMaxima;
-        System.out.println("Bateria recarregada. Autonomia atual: " + autonomiaAtual);
-    }
-
-    public double getAutonomiaAtual() {
-        return autonomiaAtual;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void reduzirAutonomia(double distancia) {
-        autonomiaAtual -= distancia;
-    }
-}
+import java.util.ArrayList;
+import java.util.List;
 
 
-class CarroCompacto extends CarroEletrico {
-    public CarroCompacto(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
-        super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
-    }
-}
+//Classe que representa um carro elétrico com seus atributos
+ 
+public class CarroEletrico {
 
-class CarroSedan extends CarroEletrico {
-    public CarroSedan(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
-        super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
-    }
-}
+  protected int id;                        // ID do carro
+  protected String marca;                  // Marca do carro
+  protected String modelo;                 // Modelo do carro
+  protected int anoFabricacao;             // Ano de fabricação
+  protected double capacidadeTotalBateria; // Capacidade da bateria em kWh
+  protected double autonomiaMaxima;        // Autonomia máxima em km
+  protected double tempoMedioRecarga;      // Tempo médio de recarga em horas
 
-class CarroSUV extends CarroEletrico {
-    public CarroSUV(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
-        super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
+  
+  //Construtor que inicializa os dados do carro e o adiciona a uma frota
+  
+  public CarroEletrico(int id, String marca, String modelo, int anoFabricacao, double autonomiaMaxima,
+                       double capacidadeTotalBateria, double tempoMedioRecarga, Frota frota) {
+    this.id = id;
+    this.marca = marca;
+    this.modelo = modelo;
+    this.anoFabricacao = anoFabricacao;
+    this.autonomiaMaxima = autonomiaMaxima;
+    this.capacidadeTotalBateria = capacidadeTotalBateria;
+    this.tempoMedioRecarga = tempoMedioRecarga;
+    frota.addVeiculo(this);  // Adiciona o carro à frota
+  }
+
+  // Métodos Getters para obter os atributos do carro
+  public String getModelo() {
+     return modelo; 
+
     }
-}
-class CarroSUV extends CarroEletrico {
-    public CarroSUV(int id, String marca, String modelo, int anoFabricacao, double capacidadeBateria, double autonomiaMaxima) {
-        super(id, marca, modelo, anoFabricacao, capacidadeBateria, autonomiaMaxima);
+
+  public int getId() {
+     return id;
+
     }
+  public String getMarca() { 
+    return marca; 
+
+  }
+
+  public int getAnoFabricacao() { 
+    return anoFabricacao;
+
+   }
+
+  public double getCapacidadeTotalBateria() { 
+    return capacidadeTotalBateria;
+
+   }
+
+  public double getAutonomiaMaxima() { 
+    return autonomiaMaxima;
+
+   }
+
+  public double getTempoMedioRecarga() { 
+    return tempoMedioRecarga;
+
+  }
+
+  //Verifica se o carro consegue completar uma rota específica, considerando todas0 as paradas de recarga
+  
+  public boolean verificarAutonomia(Rota rota, Registro r) {
+    List<Eletropostos> listEletropostos = rota.getEletropostos();
+    List<Eletropostos> eletropostosParada = new ArrayList<>();
+    double distancia = rota.getKmPercorrido();
+    int contador = 0;
+
+    // Laço para verificar se o carro possui autonomia suficiente para chegar até o próximo eletroposto
+    while (autonomiaMaxima < distancia && contador < listEletropostos.size()) {
+      Eletropostos eletroposto = listEletropostos.get(contador);
+      eletropostosParada.add(eletroposto);
+
+      // Verifica se o carro consegue chegar ao eletroposto
+      if (autonomiaMaxima < eletroposto.getDistancia()) {
+        return false;  // Retorna False, caso a autonomia for suficiente
+      }
+      autonomiaMaxima -= eletroposto.getDistancia();
+      distancia -= eletroposto.getDistancia();
+      contador++;
+    }
+
+    // Exibe as paradas de recarga
+    System.out.println("Paradas:");
+    for (Eletropostos e : eletropostosParada) {
+      System.out.println("Distancia Eletroposto: " + e.getDistancia());
+      r.addRegistroRecarga("Eletroposto da Rota: " + rota.getOrigem() + "/" + rota.getDestino() + 
+                           ", Veiculo Modelo: " + modelo + ", Marca: " + marca);
+    }
+
+    // Retorna se conseguiu completar a rota
+    if (autonomiaMaxima < distancia) {
+      return false;
+    } else {
+      capacidadeTotalBateria -= rota.getKmPercorrido();
+      return true;
+    }
+  }
+
+  
+  // Define a capacidade total da bateria do carro
+  
+  public void setCapacidadeTotalBateria(double capacidadeTotalBateria) {
+    this.capacidadeTotalBateria = capacidadeTotalBateria;
+  }
 }
